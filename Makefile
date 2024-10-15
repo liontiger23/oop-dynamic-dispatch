@@ -23,8 +23,9 @@ COMMON_DIR = common
 
 SRC  = $(wildcard $(SRC_DIR)/*.md)
 PDF  = $(SRC:.md=.pdf)
+PDF_DARK = $(PDF:.pdf=-dark.pdf)
 
-PDF_PUBLISH = $(PDF:$(SRC_DIR)/%=$(PUBLISH_DIR)/%)
+PDF_PUBLISH = $(PDF:$(SRC_DIR)/%=$(PUBLISH_DIR)/%) $(PDF_DARK:$(SRC_DIR)/%=$(PUBLISH_DIR)/%)
 PDF_NAMES = $(PDF:$(SRC_DIR)/%.pdf=%)
 
 PNG_ROOT = $(wildcard $(IMAGES_DIR)/*.png)
@@ -53,11 +54,11 @@ DOT_PDF = $(DOT_PDF_ROOT) $(DOT_PDF_TARGET)
 all: pdf
 
 publish: $(PDF_PUBLISH)
-pdf:  $(PDF)
+pdf:  $(PDF) $(PDF_DARK)
 
 clean: 
 	@echo "Cleaning up..."
-	rm -rvf $(PDF) $(SVG_PDF) $(DOT_PDF)
+	rm -rvf $(PDF) $(PDF_DARK) $(SVG_PDF) $(DOT_PDF)
 
 ############################
 # Publish patterns
@@ -75,6 +76,9 @@ PANDOC_ARGS :=
 
 $(PDF): %.pdf: %.md
 	$(PANDOC) $(PANDOC_ARGS) -t beamer --pdf-engine lualatex $< -o $@
+
+$(PDF_DARK): %-dark.pdf: %.md
+	$(PANDOC) $(PANDOC_ARGS) -t beamer --pdf-engine lualatex --variable darkmode=true $< -o $@
 	
 ############################
 # Image patterns
@@ -99,7 +103,8 @@ ROOT_IMAGE_DEPS = $(filter $(IMAGES_DIR)/%,$(DOT_PDF_ROOT) $(SVG_PDF_ROOT) $(PNG
 
 .SECONDEXPANSION:
 $(PDF): $(SRC_DIR)/%.pdf: $(ROOT_IMAGE_DEPS) $(COMMON_PNG_IMAGE_DEPS) $$(TARGET_IMAGE_DEPS)
+$(PDF_DARK): $(SRC_DIR)/%-dark.pdf: $(ROOT_IMAGE_DEPS) $(COMMON_PNG_IMAGE_DEPS) $$(TARGET_IMAGE_DEPS)
 
-$(PDF): $(COMMON_DIR)/pres.yaml $(COMMON_DIR)/pres-preamble.tex $(COMMON_DIR)/pres-template.tex
-$(PDF): PANDOC_ARGS = $(COMMON_DIR)/pres.yaml -H $(COMMON_DIR)/pres-preamble.tex --listings --template $(COMMON_DIR)/pres-template.tex --slide-level=1
+$(PDF) $(PDF_DARK): $(COMMON_DIR)/pres.yaml $(COMMON_DIR)/pres-preamble.tex $(COMMON_DIR)/pres-template.tex
+$(PDF) $(PDF_DARK): PANDOC_ARGS = $(COMMON_DIR)/pres.yaml -H $(COMMON_DIR)/pres-preamble.tex --listings --template $(COMMON_DIR)/pres-template.tex --slide-level=1
 

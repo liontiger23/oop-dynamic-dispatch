@@ -3,20 +3,48 @@
 %% Fix for "Missing number, treated as zero spaces"
 %% when using consecutive spaces
 \newsavebox\grayarrow
-\sbox\grayarrow{\raisebox{0ex}[0ex][0ex]{\ensuremath{\textcolor{red}\hookrightarrow\space}}}
+\sbox\grayarrow{\raisebox{0ex}[0ex][0ex]{\ensuremath{\textcolor{CtpOverlay1}\hookrightarrow\space}}}
 
-\lstset{language=scala,
-    basicstyle=\ttfamily,breaklines=false,
-    captionpos=b,
-    numberstyle=\tiny\color{gray},
-    numbersep=5pt,
-    escapeinside={\$\$},columns=flexible,
-    emph=[1]{ordered,by,break,dom,call},emphstyle=[1]{\bfseries},
-    emph=[2]{super,final,protected,private,package},emphstyle=[2]{},
-    emph=[3]{find,resolve},emphstyle=[3]{\itshape},
-    postbreak=\usebox\grayarrow,
-    texcl=true,
+
+\lstdefinestyle{default}{
+    % Note: \small\color{CtpText} in basicstyle interferes with style in inlined text
+    basicstyle   = {\ttfamily},
+    stringstyle  = {\color{CtpGreen}},
+    commentstyle = {\color{CtpOverlay1}},
+    keywordstyle = {\color{CtpMauve}},
+    keywordstyle = [2]{\color{CtpBlue}},
+    keywordstyle = [3]{\color{CtpYellow}},
+    keywordstyle = [4]{\color{CtpLavender}},
+    keywordstyle = [5]{\color{CtpPeach}},
+    keywordstyle = [6]{\color{CtpTeal}},
+    captionpos   = b,
+    breaklines   = false,
+    numberstyle  = \tiny\color{CtpOverlay1},
+    numbersep    = 5pt,
+    escapeinside = {\$\$},
+    columns      = flexible,
+    postbreak    = \usebox\grayarrow,
+    showstringspaces = false,
+    texcl        = true,
 }
+
+\lstdefinestyle{bash}{
+    style = default,
+    language  = bash,
+    emph      = [0]{local},
+    emphstyle = [0]{},
+}
+
+\lstdefinestyle{diff}{
+  style=default,
+  morecomment=[n][\color{CtpTeal}]{@@}{@@\^^M},     % group identifier
+  morecomment=[n][\color{CtpRed}]{-}{\^^M},         % deleted lines 
+  morecomment=[n][\color{CtpGreen}]{+}{\^^M},       % added lines
+  morecomment=[n][\color{CtpOverlay1}]{---}{\^^M}, % Diff lheader lines (must appear after +,-)
+  morecomment=[n][\color{CtpOverlay1}]{+++}{\^^M},
+}
+
+\lstset{style=default}
 
 %%%%%%%
 %% Allow skipping line numbers -- https://tex.stackexchange.com/a/215752
@@ -40,8 +68,17 @@
 \makeatother
 %%%%%%%
 
+\usepackage{mdframed}
+
+%% Provides BVerbatim environment which boxes verbatim
+%% so it can be centered -- https://tex.stackexchange.com/a/122197
+\usepackage{fancyvrb}
+
 %% Set numbered footnotes in minipages
 \renewcommand{\thempfootnote}{\arabic{mpfootnote}}
+
+%% Support for QR codes
+\usepackage[nolinks]{qrcode}
 
 %% Do not number tables
 %\captionsetup[table]{labelformat=empty}
@@ -82,9 +119,9 @@
 \setbeamerfont{page number in head/foot}{size=\footnotesize}
 \setbeamercolor{page number in head/foot}{fg=main}
 
-\colorlet{main}{black}
-\colorlet{maininverted}{white}
-\definecolor{bginverted}{RGB}{98,98,98}
+\setbeamercolor{normal text}{fg=main}
+\setbeamercolor{item}{fg=main}
+\setbeamercolor{background canvas}{bg=bgmain}
 
 \setbeamercolor*{palette primary}{fg=maininverted,bg=bginverted}
 

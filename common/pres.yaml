@@ -5,6 +5,8 @@ colortheme: default
 fontsize: 11pt
 aspectratio: 169
 listings: true
+colorlinks: true
+urlcolor: CtpMauve
 
 mainfont: DejaVu Sans
 monofont: DejaVu Sans Mono
