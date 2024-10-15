@@ -39,7 +39,7 @@ company: My company
 \only<3-4>{
 \centering
 ```
-![](images/sample/Markdown-mark.pdf){ width=60% }
+![](images/dispatch/Markdown-mark.pdf){ width=60% }
 ```{=latex}
 }
 ```
@@ -48,7 +48,7 @@ company: My company
 \only<4>{
 \centering
 ```
-![](images/sample/Markdown-mark.svg.png){ width=60% }
+![](images/dispatch/Markdown-mark.svg.png){ width=60% }
 ```{=latex}
 }
 ```

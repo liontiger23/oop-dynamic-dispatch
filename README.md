@@ -1,14 +1,9 @@
-# Presentation template
+# OOP: Dynamic dispatch
 
-Sample template to get you started with Pandoc + Beamer presentations.
+Slides about polymorphism and dynamic dispatch implementation
+for OOP course at NSU Sys.Pro.
 
-Fork this repository to bootstrap your presentation.
-
-Source markdown files located at [src](src) directory.
-Result is published at [publish](publish) directory.
-
-Sample: [src/sample.md](src/sample.md)  
-Result: [publish/sample.pdf](publish/sample.pdf)
+Presentation: [publish/dispatch.pdf](publish/dispatch.pdf)
 
 ## Building
 
@@ -26,9 +21,3 @@ which can then be committed to the repo:
 ```
 make publish
 ```
-
-## Variations
-
-More specialized use cases can be found as separate branches:
-
-- Support for cyrillic characters: [lang/cyrillic](https://github.com/liontiger23/presentation-template/tree/lang/cyrillic)
