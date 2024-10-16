@@ -581,7 +581,7 @@ x.foo()
 ```
 ::::: {.block}
 ## \centering Виртуальный вызов `x.b()`
-
+\vspace{-0.5em}
 ```c
 // Формальный тип x - класс B
 call x.vmt[vnum$\textsubscript{B,b}$]
@@ -693,7 +693,7 @@ call x.vmt[vnum$\textsubscript{B,b}$]
 ```
 ::::: {.block}
 ## \centering Интерфейсный вызов `x.b()`
-
+\vspace{-0.5em}
 ```c
 // Формальный тип x - интерфейс I
 imt$\textsubscript{C,I}$ = x.imts.find(&I)
@@ -776,9 +776,11 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
     \end{scope}
 
     \uncover<3->{
+    {\setbeamercovered{transparent=40} \uncover<0>{
     \begin{struct}[right={1.6*\structnodewidth} of imt C I 0.north]{imt B}
         \field           {} {imt B I 0}    {\&I::b()}
     \end{struct}
+    }}
     }
 
     {\setbeamercovered{transparent=40} \uncover<0>{
