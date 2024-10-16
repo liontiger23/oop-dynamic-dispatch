@@ -35,7 +35,13 @@ institute: NSU
 :::: {.column width=47%}
 
 ```{=latex}
-\lstset{style=default,basicstyle={\small\ttfamily}}
+\lstset{
+  style=default,
+  language=java,
+  morekeywords={var},
+  basicstyle={\small\ttfamily},
+  columns=fixed,
+}
 ```
 
 \vspace{-1em}
@@ -43,7 +49,7 @@ institute: NSU
 ```{=latex}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = ...;
 var y = ...;
 var z = x + y; // ???
@@ -52,7 +58,7 @@ var z = x + y; // ???
 \end{onlyenv}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = 1;     // int
 var y = ...;
 var z = x + y; // ???
@@ -61,7 +67,7 @@ var z = x + y; // ???
 \end{onlyenv}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = 1;     // int
 var y = 2;     // int
 var z = x + y; // ???
@@ -70,7 +76,7 @@ var z = x + y; // ???
 \end{onlyenv}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = 1;     // int
 var y = 2;     // int
 var z = x + y; // 3 (int)
@@ -79,7 +85,7 @@ var z = x + y; // 3 (int)
 \end{onlyenv}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = 1;     // int
 var y = 2.0;   // double
 var z = x + y; // ???
@@ -88,7 +94,7 @@ var z = x + y; // ???
 \end{onlyenv}
 \begin{onlyenv}<+>
 ```
-```{.java columns=fixed}
+```
 var x = 1;     // int
 var y = 2.0;   // double
 var z = x + y; // 3.0 (double)
@@ -102,7 +108,7 @@ var z = x + y; // 3.0 (double)
 ```{=latex}
 \begin{onlyenv}<.->
 ```
-```{.java columns=fixed}
+```
 String add(int x, int y) {
   return "ints: " + (x + y);
 }
@@ -183,24 +189,8 @@ interface I {
 ::: columns
 :::: {.column width=54%}
 
-```{=latex}
-\begin{minipage}[t][.6\textheight][c]{\columnwidth}
-```
-
-```{=latex}
-\end{minipage}
-```
-
 ::::
 :::: {.column width=46%}
-
-```{=latex}
-\begin{minipage}[t][.6\textheight][c]{\columnwidth}
-```
-
-```{=latex}
-\end{minipage}
-```
 
 ::::
 :::
