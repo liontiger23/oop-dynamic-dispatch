@@ -561,15 +561,46 @@ x.foo()
 ::::
 :::
 
-# Диспетчеризация виртуальных методов
+# Диспетчеризация виртуальных методов {.fragile}
+
+. . .
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=52%}
+::::: {.block}
+## \centering Таблица виртуальных методов
+> \centering \footnotesize Virtual Method Table, VMT, vtable
+
+- `\uncover<3->{`{=latex} Массив с адресами реализаций виртуальных методов класса `}`{=latex}
+- `\uncover<4->{`{=latex} Таблицы подклассов расширяют таблицу суперкласса `}`{=latex}
+- `\uncover<5->{`{=latex} Таблица доступна напрямую из каждого объекта класса `}`{=latex}
+- `\uncover<6->{`{=latex} Для каждого виртуального метода можно определить *виртуальный номер* `}`{=latex}
+:::::
+```{=latex}
+\begin{uncoverenv}<7->
+```
+::::: {.block}
+## \centering Виртуальный вызов `x.b()`
+
+```c
+// Формальный тип x - класс B
+call x.vmt[vnum$\textsubscript{B,b}$]
+```
+:::::
+```{=latex}
+\end{uncoverenv}
+```
+::::
+\vrule
+\hspace{0.2em}
+:::: {.column width=48%}
+::::: {.block}
 ##
+```{=latex}
 \centering
 \begin{tikzpicture}
 
-    \only<1>{
+    \uncover<5->{
     \begin{struct}{object}
         \header             {object header} {Object}
         \field [dotted]  {} {object vmt}    {\&VMT\textsubscript{C}}
@@ -577,7 +608,120 @@ x.foo()
     \end{struct}
     }
 
-    \visible<2>{
+    \uncover<3->{
+    \begin{struct}[right={1.6*\structnodewidth} of object]{vmt C}
+        \header                {vmt C header} {VMT\textsubscript{C}}
+        \field [dotted]  {\only<6->{[0]}} {vmt C 0}      {\&B::a()}
+        \field [dashed]  {\only<6->{[1]}} {vmt C 1}      {\&C::b()}
+        \field           {\only<6->{[2]}} {vmt C 2}      {\&K::c()}
+    \end{struct}
+    }
+
+    \uncover<5->{
+    \connect[0.25]{object vmt.east}{vmt C header.west}{}
+    }
+
+    \uncover<4->{
+    {\setbeamercovered{transparent=40} \uncover<0-3>{
+
+    \begin{struct}[right={1.6*\structnodewidth} of vmt C]{vmt B}
+        \header                {vmt B header} {VMT\textsubscript{B}}
+        \field [dotted]  {\only<6->{[0]}} {vmt B 0}      {\&B::a()}
+        \field           {\only<6->{[1]}} {vmt B 1}      {\&I::b()}
+    \end{struct}
+
+    }}
+    }
+
+    %% To prevent jumping
+    \uncover<0>{
+    \begin{struct}[below=\structnodeheight of object rest]{imts}
+        \header              {imts header} {IMTs}
+        \field [dotted]  {I} {imts I}      {\&IMT\textsubscript{C,I}}
+        \field [dotted]  {J} {imts J}      {\&IMT\textsubscript{C,J}}
+        \field           {K} {imts K}      {\&IMT\textsubscript{C,K}}
+    \end{struct}
+    }
+
+    \begin{scope}[on background layer]
+        \uncover<4->{
+        {\setbeamercovered{transparent=40} \uncover<0-3>{
+        \draw [dashed] (vmt C 0.north east) -- (vmt B 0.north west);
+        \draw [dashed] (vmt C 1.south east) -- (vmt B 1.south west);
+        }}
+        }
+    \end{scope}
+
+\end{tikzpicture}
+\begin{tikzpicture}[remember picture, overlay]
+    \node [shift={(-4em,3em)}]  at (current page.south east)
+        {%
+        \begin{tikzpicture}[remember picture,overlay,scale=0.6, every node/.style={scale=0.6}]
+
+            \matrix [row sep=0.5em, column sep=0.5em,ampersand replacement=\&] {
+            \node [class] (B) {B}; \& \node [interface] (J) {J}; \& \node [interface] (K) {K};\\
+            \node [class] (C) {C}; \& \node [interface] (I) {I}; \& \\
+            };
+            \graph [use existing nodes] {
+                C -> {B -> J, I -> {J, K}}
+            };
+
+        \end{tikzpicture}
+        };
+\end{tikzpicture}
+```
+:::::
+::::
+:::
+
+# Диспетчеризация интерфейсных методов
+
+::: columns
+:::: {.column width=52%}
+::::: {.block}
+## \centering Таблица интерфейсных методов
+> \centering \footnotesize Interface Method Table, IMT, itable
+
+- `\uncover<2->{`{=latex} Массив с адресами реализаций методов интерфейса `}`{=latex}
+- `\uncover<3->{`{=latex} Раскладка фиксирована во всех реализующих классах `}`{=latex}
+- `\uncover<4->{`{=latex} Таблицы доступны из каждого объекта `}`{=latex}
+- `\uncover<5->{`{=latex} Для каждого интерфейсного метода можно определить *виртуальный номер* `}`{=latex}
+- `\uncover<6->{`{=latex} Необходим поиск нужной таблицы `}`{=latex}
+:::::
+```{=latex}
+\begin{uncoverenv}<7->
+```
+::::: {.block}
+## \centering Интерфейсный вызов `x.b()`
+
+```c
+// Формальный тип x - интерфейс I
+imt$\textsubscript{C,I}$ = x.imts.find(&I)
+call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
+```
+:::::
+```{=latex}
+\end{uncoverenv}
+```
+::::
+\vrule
+\hspace{0.2em}
+:::: {.column width=48%}
+::::: {.block}
+##
+```{=latex}
+\centering
+\begin{tikzpicture}
+
+    \only<1-3>{
+    \begin{struct}{object}
+        \header             {object header} {Object}
+        \field [dotted]  {} {object vmt}    {\&VMT\textsubscript{C}}
+        \field           {} {object rest}   {...}
+    \end{struct}
+    }
+
+    \only<4->{
     \begin{struct}{object}
         \header             {object header} {Object}
         \field [dotted]  {} {object vmt}    {\&VMT\textsubscript{C}}
@@ -586,134 +730,101 @@ x.foo()
     \end{struct}
     }
 
-
-    \begin{struct}[right={2*\structnodewidth} of object]{vmt C}
+    \begin{struct}[right={1.6*\structnodewidth} of object]{vmt C}
         \header                {vmt C header} {VMT\textsubscript{C}}
         \field [dotted]  {[0]} {vmt C 0}      {\&B::a()}
         \field [dashed]  {[1]} {vmt C 1}      {\&C::b()}
         \field           {[2]} {vmt C 2}      {\&K::c()}
     \end{struct}
 
-    {\setbeamercovered{transparent=40} \uncover<1-2>{
-    \connect{object vmt}{vmt C header}{}
-    }}
+    \connect[0.25]{object vmt.east}{vmt C header.west}{}
 
-
-    \begin{visibleenv}<2>
-    {\setbeamercovered{transparent=40} \uncover<2>{
+    \uncover<4->{
     \begin{struct}[below=\structnodeheight of object rest]{imts}
         \header              {imts header} {IMTs}
         \field [dotted]  {I} {imts I}      {\&IMT\textsubscript{C,I}}
         \field [dotted]  {J} {imts J}      {\&IMT\textsubscript{C,J}}
         \field           {K} {imts K}      {\&IMT\textsubscript{C,K}}
     \end{struct}
+    }
 
+    \only<4->{
     \draw [->] (object imts.west) 
-            -| ($ (imts header.west) - (0.5,0) $)
+            -| ($ (imts header.west) - (0.2,0) $)
             -- (imts header.west);
-    }}
+    }
 
-
-
+    \uncover<2->{
     \begin{struct}[below=\structnodeheight of vmt C 2]{imt C}
-        \field [draw]    {[0]} {imt C I 0}    {\&C::b()}
-        \field [draw]    {[0]} {imt C J 0}    {\&K::c()}
-        \field [dotted]  {[0]} {imt C K 0}    {\&C::b()}
-        \field           {[1]} {imt C K 1}    {\&K::c()}
+        \field [draw]    {\only<5->{[0]}} {imt C I 0}    {\&C::b()}
+        \field [draw]    {\only<5->{[0]}} {imt C J 0}    {\&K::c()}
+        \field [dotted]  {\only<5->{[0]}} {imt C K 0}    {\&C::b()}
+        \field           {\only<5->{[1]}} {imt C K 1}    {\&K::c()}
     \end{struct}
 
-    \imtR{imt C I 0}{imt C I 0}{IMT\textsubscript{C,I}}
-    \imtR{imt C J 0}{imt C J 0}{IMT\textsubscript{C,J}}
-    \imtR{imt C K 0}{imt C K 1}{IMT\textsubscript{C,K}}
-    \end{visibleenv}
+    \imtR{imt C I 0}{imt C I 0}{\tiny IMT\textsubscript{C,I}}
+    \imtR{imt C J 0}{imt C J 0}{\tiny IMT\textsubscript{C,J}}
+    \imtR{imt C K 0}{imt C K 1}{\tiny IMT\textsubscript{C,K}}
+    }
 
     \begin{scope}[on background layer]
-        \begin{visibleenv}<2>
-        {\setbeamercovered{transparent=40} \uncover<2>{
-        \connect[0.20]{imts I.east}{imt C I 0.west}{}
-        \connect[0.35]{imts J.east}{imt C J 0.west}{}
-        \connect[0.50]{imts K.east}{imt C K 0.west}{}
-        }}
-        \end{visibleenv}
+        \uncover<4->{
+        \connect[0.10]{imts I.east}{imt C I 0.west}{}
+        \connect[0.20]{imts J.east}{imt C J 0.west}{}
+        \connect[0.30]{imts K.east}{imt C K 0.west}{}
+        }
     \end{scope}
 
+    \uncover<3->{
+    \begin{struct}[right={1.6*\structnodewidth} of imt C I 0.north]{imt B}
+        \field           {} {imt B I 0}    {\&I::b()}
+    \end{struct}
+    }
 
     {\setbeamercovered{transparent=40} \uncover<0>{
 
-    \begin{struct}[right={2*\structnodewidth} of vmt C]{vmt B}
+    \begin{struct}[right={1.6*\structnodewidth} of vmt C]{vmt B}
         \header                {vmt B header} {VMT\textsubscript{B}}
         \field [dotted]  {[0]} {vmt B 0}      {\&B::a()}
         \field           {[1]} {vmt B 1}      {\&I::b()}
     \end{struct}
 
-
-    \begin{visibleenv}<2>
-    \begin{struct}[right={2*\structnodewidth} of imt C I 0.north]{imt B}
-        \field           {} {imt B I 0}    {\&I::b()}
-    \end{struct}
-
-    \imtR{imt B I 0}{imt B I 0}{IMT\textsubscript{B,I}}
-    \end{visibleenv}
+    }}
 
     \begin{scope}[on background layer]
-        \uncover<0>{
+        {\setbeamercovered{transparent=40} \uncover<0>{
         \draw [dashed] (vmt C 0.north east) -- (vmt B 0.north west);
         \draw [dashed] (vmt C 1.south east) -- (vmt B 1.south west);
-        \begin{visibleenv}<2>
-        \uncover<2>{
+        }}
+        \uncover<3->{
+        {\setbeamercovered{transparent=40} \uncover<0-2>{
         \draw [dashed] (imt C I 0.north east) -- (imt B I 0.north west);
         \draw [dashed] (imt C I 0.south east) -- (imt B I 0.south west);
-        }
-        \end{visibleenv}
+        }}
         }
     \end{scope}
 
-    }}
-
 \end{tikzpicture}
-::::
-\vrule
-\hspace{0.5em}
-:::: {.column width=40%}
-##
-\centering
-\begin{tikzpicture}
+\begin{tikzpicture}[remember picture, overlay]
+    \node [shift={(-4em,3em)}]  at (current page.south east)
+        {%
+        \begin{tikzpicture}[remember picture,overlay,scale=0.6, every node/.style={scale=0.6}]
 
-    \matrix [row sep=1em, column sep=1em,ampersand replacement=\&] {
-    \node [class] (B) {B}; \& \node [interface] (I) {I}; \& \node [interface] (J) {J};\\
-    \node [class] (C) {C}; \& \node [interface] (K) {K}; \& \\
-    };
-    \graph [use existing nodes] {
-        C -> {B -> I, K -> {I, J}}
-    };
+            \matrix [row sep=0.5em, column sep=0.5em,ampersand replacement=\&] {
+            \node [class] (B) {B}; \& \node [interface] (J) {J}; \& \node [interface] (K) {K};\\
+            \node [class] (C) {C}; \& \node [interface] (I) {I}; \& \\
+            };
+            \graph [use existing nodes] {
+                C -> {B -> J, I -> {J, K}}
+            };
 
+        \end{tikzpicture}
+        };
 \end{tikzpicture}
-\vspace{1em}
-\hrule
-::::: {.block}
-## \centering Виртуальный вызов `x.b()`
-```
-// Формальный тип x: C
-call x.vmt[vnum$\textsubscript{C,b}$]
 ```
 :::::
-`\begin{visibleenv}<2>`{=latex}
-\hrule
-::::: {.block}
-## \centering Интерфейсный вызов `x.b()`
-```
-// Формальный тип x: I
-imt$\textsubscript{C,I}$ := x.imts.find(&I)
-call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$] 
-```
-:::::
-\End{visibleenv}
 ::::
 :::
-
-# Диспетчеризация интерфейсных методов
-
-## Таблица интерфейсных методов
 
 # Диспетчеризация интерфейсных методов
 
