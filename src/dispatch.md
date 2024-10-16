@@ -187,10 +187,113 @@ interface I {
 ## \centering Полиморфизм подтипов
 
 ::: columns
-:::: {.column width=54%}
+:::: {.column width=50%}
+
+- Отношение *подтипа* `S <: T`
+
+  \vspace{0.2em}
+  > \footnotesize Тип `S` совместим по присваиванию с типом `T`
+
+  - `int <: long`{.java}
+  - `C <: B` если `class C extends B`{.java}
+
+. . .
+
+- В общем случае отношение подтипа
+  `\textcolor{CtpRed}{`{=latex}*независимо*`}`{=latex} от наследования
+- Но для ссылочных типов в Java совпадает[^1]
+- `\uncover<+(1)->{`{=latex} Выбор реализации делается
+  в зависимости от реального типа объекта
+  *receiver* в момент исполнения вызова `}`{=latex}
+  - `\uncover<.(1)->{`{=latex} *Переопределение* методов `}`{=latex}
+
+[^1]: Даже для массивов, но это другая история
 
 ::::
-:::: {.column width=46%}
+:::: {.column width=47%}
+
+. . .
+
+```{=latex}
+\lstset{
+  style=default,
+  language=java,
+  morekeywords={var},
+  basicstyle={\small\ttfamily},
+  columns=fixed,
+}
+```
+
+```
+class A {
+  void foo() { println("A.foo"); }
+}
+class B extends A {
+  void foo() { println("B.foo"); }
+}
+class C extends A { }
+```
+
+. . .
+
+```{=latex}
+\begin{onlyenv}<+>
+```
+```
+A x = ...;
+x.foo();   // ???
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new A()
+x.foo();   // ???
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new A()
+x.foo();   // A.foo
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new B()
+x.foo();   // ???
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new B()
+x.foo();   // B.foo
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new C()
+x.foo();   // ???
+```
+```{=latex}
+\end{onlyenv}
+\begin{onlyenv}<+>
+```
+```
+A x = ...; // new C()
+x.foo();   // A.foo
+```
+```{=latex}
+\end{onlyenv}
+```
 
 ::::
 :::
