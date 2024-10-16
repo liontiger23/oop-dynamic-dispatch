@@ -17,7 +17,7 @@ institute: NSU
 \vspace{0.5em}
 > Ad hoc (букв. «к этому») --- латинская фраза,
 > означающая «для данного случая», «специально для этого».
-> \hfill [Wikipedia](https://ru.wikipedia.org/wiki/Ad_hoc)
+> `\hfill`{=latex} [Wikipedia](https://ru.wikipedia.org/wiki/Ad_hoc)
 
 . . .
 
