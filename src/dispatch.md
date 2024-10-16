@@ -204,6 +204,7 @@ interface I {
 - Выбор реализации делается
   в зависимости от реального типа объекта
   *receiver* в момент исполнения вызова
+  - *Виртуальные* методы
   - *Переопределение* методов
 
 ::::
@@ -305,19 +306,98 @@ x.foo();   // A.foo
 > *Диспетчеризация* --- процесс выбора реализации полиморфной функции
 
 
-# Диспетчеризация
+# Диспетчеризация {.fragile}
 
 ::: columns
-:::: {.column width=54%}
-## Статическая
+:::: {.column width=50%}
+```{=latex}
+\begin{uncoverenv}<2->
+```
+::::: block
 
-## Динамическая
+## \centering Статическая диспетчеризация
 
-## Одиночная
+- Реализация известна до исполнения
+  - Прямой вызов (например статический)
+  - Перегрузка
+  - *Девиртуализация* в компиляторе
+- Эффективно без поддержки среды исполнения
 
-## Множественная
+:::::
+
+```{=latex}
+\end{uncoverenv}
+```
 ::::
-:::: {.column width=46%}
+:::: {.column width=50%}
+```{=latex}
+\begin{uncoverenv}<4->
+```
+::::: block
+
+## \centering Динамическая диспетчеризация
+
+- Реализация известна только во время исполнения конкретного вызова
+  - Виртуальный вызов
+  - Интерфейсный вызов
+- Требует поддержки среды исполнения
+
+:::::
+
+```{=latex}
+\end{uncoverenv}
+```
+::::
+:::
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+::: columns
+:::: {.column width=50%}
+```{=latex}
+\begin{uncoverenv}<3->
+\begin{minipage}[c][.1\textheight][t]{\linewidth}
+\centering
+\begin{tikzpicture}
+  \node [anchor=east] at (-1,0) {
+\begin{BVerbatim}
+C.foo()
+\end{BVerbatim}
+  };
+  \node [anchor=west] at (1,0) {
+\begin{BVerbatim}
+call &C::foo()
+\end{BVerbatim}
+  };
+  \draw [->] (-0.5,0) -- (0.5,0);
+\end{tikzpicture}
+\end{minipage}
+\end{uncoverenv}
+```
+::::
+:::: {.column width=50%}
+```{=latex}
+\begin{uncoverenv}<5->
+\begin{minipage}[c][.1\textheight][t]{\linewidth}
+\centering
+\begin{tikzpicture}
+  \node [anchor=east] at (-1,0) {
+\begin{BVerbatim}
+x.foo()
+\end{BVerbatim}
+  };
+  \node [anchor=west] at (1,0) {
+\begin{BVerbatim}
+???
+\end{BVerbatim}
+  };
+  \draw [->] (-0.5,0) -- (0.5,0);
+\end{tikzpicture}
+\end{minipage}
+\end{uncoverenv}
+```
 ::::
 :::
 
