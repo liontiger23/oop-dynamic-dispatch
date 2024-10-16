@@ -12,10 +12,6 @@ institute: NSU
 
 # Полиморфизм {.fragile .t}
 
-```{=latex}
-\lstset{style=default,basicstyle={\small\ttfamily}}
-```
-
 ## \centering Ad hoc полиморфизм
 
 \vspace{0.5em}
@@ -37,6 +33,10 @@ institute: NSU
 
 ::::
 :::: {.column width=47%}
+
+```{=latex}
+\lstset{style=default,basicstyle={\small\ttfamily}}
+```
 
 \vspace{-1em}
 
@@ -127,6 +127,8 @@ $\pause$add("1", "2") $\pause$// strings: 12
 
 ## \centering Параметрический полиморфизм
 
+. . .
+
 ::: columns
 :::: {.column width=47%}
 
@@ -137,12 +139,17 @@ $\pause$add("1", "2") $\pause$// strings: 12
 - Можно задавать дополнительные ограничения на обобщенный тип
 - `\textcolor{CtpLavender}{`{=latex} *Подробнее на следующей лекции* `}`{=latex}
 
+. . .
+
 ::::
 :::: {.column width=53%}
 
 ```{=latex}
+\lstset{style=default,basicstyle={\small\ttfamily}}
 \setbeamercovered{transparent=40}
 ```
+
+\vspace{-1em}
 
 ```java
 static <T, S> T foo(T x, S y) {
