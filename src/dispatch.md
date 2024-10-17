@@ -572,7 +572,7 @@ x.foo()
 > \centering \footnotesize Virtual Method Table, VMT, vtable
 
 - `\uncover<3->{`{=latex} Массив с адресами реализаций виртуальных методов класса `}`{=latex}
-- `\uncover<4->{`{=latex} Таблицы подклассов расширяют таблицу суперкласса `}`{=latex}
+- `\uncover<4->{`{=latex} Таблицы наследников расширяют таблицу суперкласса `}`{=latex}
 - `\uncover<5->{`{=latex} Таблица доступна напрямую из каждого объекта класса `}`{=latex}
 - `\uncover<6->{`{=latex} Для каждого виртуального метода можно определить *виртуальный номер* `}`{=latex}
 :::::
@@ -633,6 +633,10 @@ call x.vmt[vnum$\textsubscript{B,b}$]
     }}
     }
 
+    \uncover<7->{
+        \node [draw,color=CtpRed,fit=(vmt C 1 @extra) (vmt B 1)] {};
+    }
+
     %% To prevent jumping
     \uncover<0>{
     \begin{struct}[below=\structnodeheight of object rest]{imts}
@@ -659,11 +663,11 @@ call x.vmt[vnum$\textsubscript{B,b}$]
         \begin{tikzpicture}[remember picture,overlay,scale=0.6, every node/.style={scale=0.6}]
 
             \matrix [row sep=0.5em, column sep=0.5em,ampersand replacement=\&] {
-            \node [class] (B) {B}; \& \node [interface] (J) {J}; \& \node [interface] (K) {K};\\
-            \node [class] (C) {C}; \& \node [interface] (I) {I}; \& \\
+            \node [class] (B) {B}; \& \node [interface] (I) {I}; \& \node [interface] (J) {J};\\
+            \node [class] (C) {C}; \& \node [interface] (K) {K}; \& \\
             };
             \graph [use existing nodes] {
-                C -> {B -> J, I -> {J, K}}
+                C -> {B -> I, K -> {I, J}}
             };
 
         \end{tikzpicture}
@@ -685,8 +689,8 @@ call x.vmt[vnum$\textsubscript{B,b}$]
 - `\uncover<2->{`{=latex} Массив с адресами реализаций методов `}`{=latex}
 - `\uncover<3->{`{=latex} Раскладка фиксирована во всех реализующих классах `}`{=latex}
 - `\uncover<4->{`{=latex} Таблицы доступны из каждого объекта `}`{=latex}
-- `\uncover<5->{`{=latex} Для каждого интерфейсного метода можно определить *виртуальный номер* `}`{=latex}
-- `\uncover<6->{`{=latex} Необходим поиск нужной таблицы `}`{=latex}
+- `\uncover<5->{`{=latex} Необходим поиск нужной таблицы `}`{=latex}
+- `\uncover<6->{`{=latex} Для каждого интерфейсного метода можно определить *виртуальный номер* `}`{=latex}
 :::::
 ```{=latex}
 \begin{uncoverenv}<7->
@@ -756,10 +760,10 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
 
     \uncover<2->{
     \begin{struct}[below=\structnodeheight of vmt C 2]{imt C}
-        \field [draw]    {\only<5->{[0]}} {imt C I 0}    {\&C::b()}
-        \field [draw]    {\only<5->{[0]}} {imt C J 0}    {\&K::c()}
-        \field [dotted]  {\only<5->{[0]}} {imt C K 0}    {\&C::b()}
-        \field           {\only<5->{[1]}} {imt C K 1}    {\&K::c()}
+        \field [draw]    {\only<6->{[0]}} {imt C I 0}    {\&C::b()}
+        \field [draw]    {\only<6->{[0]}} {imt C J 0}    {\&K::c()}
+        \field [dotted]  {\only<6->{[0]}} {imt C K 0}    {\&C::b()}
+        \field           {\only<6->{[1]}} {imt C K 1}    {\&K::c()}
     \end{struct}
 
     \imtR{imt C I 0}{imt C I 0}{\tiny IMT\textsubscript{C,I}}
@@ -781,6 +785,10 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
         \field           {} {imt B I 0}    {\&I::b()}
     \end{struct}
     }}
+    }
+
+    \uncover<7->{
+        \node [draw,color=CtpRed,fit=(imt C I 0 @extra) (imt B I 0)] {};
     }
 
     {\setbeamercovered{transparent=40} \uncover<0>{
@@ -813,11 +821,11 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
         \begin{tikzpicture}[remember picture,overlay,scale=0.6, every node/.style={scale=0.6}]
 
             \matrix [row sep=0.5em, column sep=0.5em,ampersand replacement=\&] {
-            \node [class] (B) {B}; \& \node [interface] (J) {J}; \& \node [interface] (K) {K};\\
-            \node [class] (C) {C}; \& \node [interface] (I) {I}; \& \\
+            \node [class] (B) {B}; \& \node [interface] (I) {I}; \& \node [interface] (J) {J};\\
+            \node [class] (C) {C}; \& \node [interface] (K) {K}; \& \\
             };
             \graph [use existing nodes] {
-                C -> {B -> J, I -> {J, K}}
+                C -> {B -> I, K -> {I, J}}
             };
 
         \end{tikzpicture}
@@ -861,7 +869,7 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
   - Открытая подстановка
   - Девиртуализация
   - Условная девиртуализация
-  - Profile-Guided Optimization (PGO)
+  - Profile-guided optimization (PGO)
 - Оптимизации времени исполнения
   - Polymorphic inline cache (PIC)
   - Профилировка
