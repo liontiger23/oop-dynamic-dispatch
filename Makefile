@@ -25,7 +25,7 @@ SRC  = $(wildcard $(SRC_DIR)/*.md)
 PDF  = $(SRC:.md=.pdf)
 PDF_DARK = $(PDF:.pdf=-dark.pdf)
 
-PDF_PUBLISH = $(PDF:$(SRC_DIR)/%=$(PUBLISH_DIR)/%) $(PDF_DARK:$(SRC_DIR)/%=$(PUBLISH_DIR)/%)
+PDF_PUBLISH = $(PDF:$(SRC_DIR)/%=$(PUBLISH_DIR)/%)
 PDF_NAMES = $(PDF:$(SRC_DIR)/%.pdf=%)
 
 PNG_ROOT = $(wildcard $(IMAGES_DIR)/*.png)
@@ -54,7 +54,7 @@ DOT_PDF = $(DOT_PDF_ROOT) $(DOT_PDF_TARGET)
 all: pdf
 
 publish: $(PDF_PUBLISH)
-pdf:  $(PDF) $(PDF_DARK)
+pdf:  $(PDF)
 
 clean: 
 	@echo "Cleaning up..."
