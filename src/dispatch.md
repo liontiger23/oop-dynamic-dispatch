@@ -8,7 +8,7 @@ institute: NSU
 # Полиморфизм
 
 > *Полиморфизм* --- возможность функции с одним именем
-> иметь разные реализации
+> обрабатывать данные разных типов
 
 # Полиморфизм {.fragile .t}
 
@@ -28,6 +28,7 @@ institute: NSU
   формальных параметров функции
   - Перегрузка функций в Java
   - Перегрузка операторов в C++
+  - Type classes в Haskell
 
 . . .
 
@@ -141,7 +142,6 @@ $\pause$add("1", "2") $\pause$// strings: 12
 - Реализация функции использует *обобщенный* параметр
   - Generics в Java
   - Templates в C++
-  - Type classes в Haskell
 - Можно задавать дополнительные ограничения на обобщенный тип
 - `\textcolor{CtpLavender}{`{=latex} *Подробнее на следующей лекции* `}`{=latex}
 
@@ -299,7 +299,9 @@ x.foo();   // A.foo
 # Полиморфизм
 
 > *Полиморфизм* --- возможность функции с одним именем
-> иметь разные реализации
+> обрабатывать данные разных типов
+
+\vspace{1.5em}
 
 . . .
 
@@ -582,9 +584,23 @@ x.foo()
 ::::: {.block}
 ## \centering Виртуальный вызов `x.b()`
 \vspace{-0.5em}
+```{=latex}
+\begin{uncoverenv}<8->
+```
+```
+invokevirtual #1 // Method B.b:()V
+```
+```{=latex}
+\begin{uncoverenv}<9->
+```
 ```c
-// Формальный тип x - класс B
 call x.vmt[vnum$\textsubscript{B,b}$]
+```
+```{=latex}
+\end{uncoverenv}
+```
+```{=latex}
+\end{uncoverenv}
 ```
 :::::
 ```{=latex}
@@ -633,7 +649,7 @@ call x.vmt[vnum$\textsubscript{B,b}$]
     }}
     }
 
-    \uncover<7->{
+    \uncover<9->{
         \node [draw,color=CtpRed,fit=(vmt C 1 @extra) (vmt B 1)] {};
     }
 
@@ -698,10 +714,24 @@ call x.vmt[vnum$\textsubscript{B,b}$]
 ::::: {.block}
 ## \centering Интерфейсный вызов `x.b()`
 \vspace{-0.5em}
+```{=latex}
+\begin{uncoverenv}<8->
+```
+```
+invokeinterface #1, 1 // Method I.b:()V
+```
+```{=latex}
+\begin{uncoverenv}<9->
+```
 ```c
-// Формальный тип x - интерфейс I
-imt$\textsubscript{C,I}$ = x.imts.find(&I)
+imt$\textsubscript{C,I}$ = lookupIMT(x, &I)
 call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
+```
+```{=latex}
+\end{uncoverenv}
+```
+```{=latex}
+\end{uncoverenv}
 ```
 :::::
 ```{=latex}
@@ -787,7 +817,7 @@ call imt$\textsubscript{C,I}$[vnum$\textsubscript{I,b}$]
     }}
     }
 
-    \uncover<7->{
+    \uncover<9->{
         \node [draw,color=CtpRed,fit=(imt C I 0 @extra) (imt B I 0)] {};
     }
 
