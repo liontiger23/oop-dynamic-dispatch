@@ -162,7 +162,7 @@ static <T, S> T foo(T x, S y) {
   return x;
 }
 
-static <T extends I> boolean bar(I x, I y) {
+static <T extends I> boolean bar(T x, T y) {
   return x.test(y);
 }
 ```
